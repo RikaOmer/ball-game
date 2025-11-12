@@ -1,0 +1,20 @@
+[project]
+name = "benchmark-server"
+version = "1.0.0"
+description = "Benchmark application server"
+requires-python = ">=3.11"
+dependencies = [
+    "Flask==3.1.0",
+    "flask-cors==6.0.0",
+    "python-dotenv==1.0.1", # Updated from dotenv which is deprecated
+]
+
+[project.scripts]
+start = "app:create_app"
+dev = "dev:run_dev_server"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "pytest-cov",
+]
