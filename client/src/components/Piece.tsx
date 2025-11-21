@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useEffect } from "react";
 
 interface PieceProps {
   x: number;
   y: number;
+  color: string;
+  setColor: (color: string) => void;
+  onColorChange: (color: string) => void;
 }
 
-export default function Piece({ x, y }: PieceProps) {
-
-  const [color, setColor] = useState("white");
-  const [isHovered, setIsHovered] = useState(false);
-
+export default function Piece({ x, y, color, setColor, onColorChange }: PieceProps) {
 
   async function fetchWeather() {
     try {
@@ -24,7 +23,9 @@ export default function Piece({ x, y }: PieceProps) {
 
       const data = await response.json();
       console.log("response", data.current.temp_c);
-      setColor(PieceColorChange(data.current.temp_c));
+      const newColor = PieceColorChange(data.current.temp_c);
+      setColor(newColor);
+      onColorChange(newColor);
 
     } catch (error) {
       console.error("Fetch error:", error);
@@ -53,16 +54,11 @@ export default function Piece({ x, y }: PieceProps) {
     <div
       id="piece"
       className="circle"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       style={{
         left: x,
         top: y,
-        backgroundColor: isHovered ? "transparent" : color,
-        border: isHovered ? `4px solid ${color}` : "none",
-        boxSizing: "border-box",
-        cursor: "pointer",
-      }}
+        ['--piece-color' as any]: color,
+      } as React.CSSProperties}
     ></div>
   );
 }
